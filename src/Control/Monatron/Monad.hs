@@ -10,6 +10,7 @@ module Control.Monatron.Monad (
 import Control.Monatron.Transformer
 import Control.Monad
 import Control.Monad.Fix
+import Control.Monad.Fail
 
 newtype Id a   = Id {runId :: a}
 data    Lift a = L  {runLift :: a}
@@ -52,14 +53,18 @@ runCont k = runId. runContT (Id. k)
 
 instance Monad Id where
     return  = pure
-    fail    = error
     m >>= f = f (runId m)
 
+instance MonadFail Id where
+    fail    = error
+  
 instance Monad Lift where
   return x  = L x
-  fail x    = error x
   L x >>= k = k x
 
+instance MonadFail Lift where
+  fail x    = error x
+  
 instance Functor Id   where fmap = liftM
 instance Functor Lift where fmap = liftM
 
