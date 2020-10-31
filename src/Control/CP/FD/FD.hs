@@ -37,6 +37,7 @@ module Control.CP.FD.FD (
 
 import Control.Monad.State.Lazy
 import Control.Monad.Trans
+import Control.Monad.Fail
 import qualified Data.Map as Map
 import Data.Map(Map)
 import Data.Maybe
@@ -608,6 +609,9 @@ data FDSolver s => FDLabel s = FDLabel {
 -- | definition of FDInstance, a Solver wrapper that adds power to post boolean expressions as constraints
 newtype FDSolver s => FDInstance s a = FDInstance { unFDInstance :: StateT (FDState s) s a }
   deriving (Monad, Applicative, Functor, MonadState (FDState s))
+
+instance Monad s => MonadFail (FDInstance s) where
+  fail = error
 
 -- | helper function to combine two Maybe's
 joinWith :: (a -> a -> a) -> Maybe a -> Maybe a -> Maybe a

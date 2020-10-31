@@ -56,15 +56,15 @@ instance Monad Id where
     m >>= f = f (runId m)
 
 instance MonadFail Id where
-    fail    = error
-  
+  fail = error
+
 instance Monad Lift where
   return x  = L x
   L x >>= k = k x
 
 instance MonadFail Lift where
-  fail x    = error x
-  
+  fail = error
+
 instance Functor Id   where fmap = liftM
 instance Functor Lift where fmap = liftM
 

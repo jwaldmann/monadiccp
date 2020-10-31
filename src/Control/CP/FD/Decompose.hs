@@ -31,6 +31,8 @@ import Data.Expr.Util
 import Control.CP.FD.Graph
 import Control.CP.FD.Model
 
+import Control.Monad.Fail as F
+
 data DecompData = DecompData {
   -- expressions currently accessible as variables
   cseMapBool :: Map ModelBool EGVarId,
@@ -85,6 +87,9 @@ baseDCState = DCState {
 -- | definition of a decomposer monad
 newtype DCMonad a = DCMonad { state :: State DCState a }
   deriving (Monad, Applicative, Functor, MonadState DCState)
+
+instance MonadFail DCMonad where
+  fail = error
 
 -- | transform an expression into a graph, taking and returning an updated state
 decomposeEx :: DecompData -> Int -> Model -> ([ModelBool],[ModelInt],[ModelCol]) -> Maybe EGModel -> (DecompData,EGModel,Int)

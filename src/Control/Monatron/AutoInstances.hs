@@ -5,7 +5,7 @@
 module Control.Monatron.AutoInstances where
 
 import Control.Monatron.MonadT
-import Control.Monad.Fail
+import Control.Monad.Fail as F
 
 ------------------------------------------------------------------
 instance (Monad m, MonadT t) => Monad (t m) where
@@ -13,7 +13,7 @@ instance (Monad m, MonadT t) => Monad (t m) where
     (>>=)  = tbind
 
 instance (MonadFail m, MonadT t) => MonadFail (t m) where
-    fail   = lift . fail
+    fail   = lift . F.fail
 
 instance (Monad m, MonadT t) => Functor (t m) where fmap = liftM
 

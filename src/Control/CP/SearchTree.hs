@@ -41,6 +41,7 @@ import Control.Monad.Cont
 import Control.Monad.Reader
 import Control.Monad.Writer
 import Control.Monad.State
+import Control.Monad.Fail
 
 import Data.Monoid
 
@@ -185,13 +186,16 @@ infixl 2 \/
 
 -- | Generalization of the search tree data type,
 --   allowing monad transformer decoration.
-class (Monad m, Solver (TreeSolver m)) => MonadTree m where
+class (MonadFail m, Solver (TreeSolver m)) => MonadTree m where
   type TreeSolver m :: * -> *
   addTo   :: Constraint (TreeSolver m) -> m a -> m a
   false   :: m a
   (\/)    :: m a -> m a -> m a
   exists  :: Term (TreeSolver m) t => (t -> m a) -> m a
   label   :: (TreeSolver m) (m a) -> m a
+
+instance Solver solver => MonadFail (Tree solver) where
+  fail = error
 
 instance Solver solver => MonadTree (Tree solver) where
   type TreeSolver (Tree solver)  = solver
