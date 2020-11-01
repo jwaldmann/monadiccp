@@ -66,7 +66,7 @@ type SearchSig solver q t a =
           ForSolver t ~ solver) 
      => Int -> Tree solver a -> q -> t -> EvalState t -> TreeState t -> solver (Int,[a])
 
-type ContinueSig solver q t a =
+type ContinueSig (solver :: * -> *) q t a =
      (Solver solver, Queue q, Transformer t,   
           Elem q ~ (Label solver,Tree solver a,TreeState t),
           ForSolver t ~ solver) 
