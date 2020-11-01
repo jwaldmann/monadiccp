@@ -28,15 +28,16 @@ aperiodic n xs =
   in  loopall (0,w-1) $ \ i -> 
         let d = x ! i - x ! 0
         in  loopany (1,w-1) $ \ j -> 
-            let e = x ! modS (i+j) w - x ! modS (0+j) w
-            in modS d n @/= modS e n
+            let e = x ! modS (i+j) w - x ! j
+                -- if (i+j) wraps around, then e < 0
+            in  d @/= modS (e + n) n
 
 -- | the `mod` operation for simple cases
-modS x n = (x @< n) @? (x, x-n)
+modS x n = (x @< n) @? (x,x-n)
 
 monotone xs =
-  forM (zip xs $ tail xs) $ \ (x,y) -> x @< y
-  -- sorted $ list xs
+  -- forM (zip xs $ tail xs) $ \ (x,y) -> x @< y
+  sorted $ list xs
 
 existsRangeN bnd 0 k = k []
 existsRangeN (lo,hi) n k = exists $ \ x -> do
