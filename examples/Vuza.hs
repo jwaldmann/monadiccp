@@ -17,7 +17,8 @@ model () = do
     existsRangeN (0,n-1) 12 $ \ys -> do
       monotone ys
       -- aperiodic n ys
-      allDiff $ list $ do x <- xs ; y <- ys ; return $ mod (x + y) n
+      allDiff $ list $ do
+        x <- xs ; y <- ys ; return $ modS (x + y) n
       return $ list $ xs <> ys
 
 -- forall i : exists j :  x[i] - x[0] /= x[i+j] - x[0+j]  (mod n)
@@ -27,9 +28,12 @@ aperiodic n xs =
   in  loopall (0,w-1) $ \ i -> 
         let d = x ! i - x ! 0
         in  loopany (1,w-1) $ \ j -> 
-            let e = x ! mod (i+j) w - x ! mod (0+j) w
-            in mod d n @/= mod e n
-     
+            let e = x ! modS (i+j) w - x ! modS (0+j) w
+            in modS d n @/= modS e n
+
+-- | the `mod` operation for simple cases
+modS x n = (x @< n) @? (x, x-n)
+
 monotone xs =
   forM (zip xs $ tail xs) $ \ (x,y) -> x @< y
   -- sorted $ list xs
