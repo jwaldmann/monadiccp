@@ -4,6 +4,7 @@
   -XFunctionalDependencies
   -XUndecidableInstances
   -XOverlappingInstances
+  -XRankNTypes
 #-}
 
 --  -XOverlappingInstances
@@ -25,7 +26,8 @@ import Control.Exception (SomeException)
 ------------------------------------------------------------------
 -- State
 class Monad m => StateM z m | m -> z where
-    stateModel :: AlgModel (StateOp z) m
+    -- stateModel :: AlgModel (StateOp z) m
+    stateModel :: forall a. (StateOp z) a -> m a
 
 instance Monad m => StateM z (StateT z m) where
     stateModel = modelStateT
@@ -56,7 +58,8 @@ tell z = traceX writerModel z
 ------------------------------------------------------------------
 -- Environments
 class Monad m => ReaderM z m | m -> z where
-    readerModel :: Model (ReaderOp z) m
+  -- readerModel :: Model (ReaderOp z) m
+  readerModel :: forall a. ReaderOp z (m a) -> m a
 
 instance Monad m => ReaderM z (ReaderT z m) where
     readerModel = modelReaderT
