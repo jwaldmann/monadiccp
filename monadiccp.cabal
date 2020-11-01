@@ -1,32 +1,32 @@
-Name:			monadiccp
-Version:		0.7.7
-Description:		Monadic Constraint Programming framework
-License:		BSD3
-License-file:		LICENSE
-Author:			Tom Schrijvers, Pieter Wuille
-Maintainer:		maik.riechert@arcor.de
-Build-Type:		Simple
-Category:		control
-Synopsis:		Constraint Programming
-Homepage:		https://people.cs.kuleuven.be/~tom.schrijvers/MCP/
-Bug-reports:		https://github.com/letmaik/monadiccp/issues
-Cabal-Version:		>=1.8
-Extra-Source-Files: 	examples/*.hs
-Data-Files:		README.md
+Name:                   monadiccp
+Version:                0.7.7
+Description:            Monadic Constraint Programming framework
+License:                BSD3
+License-file:           LICENSE
+Author:                 Tom Schrijvers, Pieter Wuille
+Maintainer:             maik.riechert@arcor.de
+Build-Type:             Simple
+Category:               control
+Synopsis:               Constraint Programming
+Homepage:               https://people.cs.kuleuven.be/~tom.schrijvers/MCP/
+Bug-reports:            https://github.com/letmaik/monadiccp/issues
+Cabal-Version:          >=1.8
+Extra-Source-Files:     examples/*.hs
+Data-Files:             README.md
 
 source-repository head
   type:      git
   location:  https://github.com/letmaik/monadiccp.git
 
 Flag Debug
-    Description:	Generate debug output
-    Default:		False
+    Description:        Generate debug output
+    Default:            False
 
 library
     hs-source-dirs: src
-    Build-Depends:	base >= 2, base < 5, containers, mtl, random, pretty, parsec >= 3.0,
+    Build-Depends:      base >= 2, base < 5, containers, mtl, random, pretty, parsec >= 3.0,
                         semigroups
-    Exposed-Modules:	Data.Expr.Sugar
+    Exposed-Modules:    Data.Expr.Sugar
                         Data.Expr.Data
                         Data.Expr.Util
                         Data.Linear
@@ -76,7 +76,7 @@ library
                         Control.Mixin.Mixin
                         Language.CPP.Syntax.AST
                         Language.CPP.Pretty
-    Other-Modules:	    Control.Monatron.Monatron
+    Other-Modules:          Control.Monatron.Monatron
                         Control.Monatron.MonadInfo
                         Control.Monatron.AutoLift
                         Control.Monatron.Operations
@@ -89,15 +89,22 @@ library
                         Control.Monatron.MonadT
                         Control.Monatron.Monad
                         Control.Monatron.ZipperExamples
-    GHC-Prof-Options:	-auto-all -caf-all
+    GHC-Prof-Options:   -auto-all -caf-all
     if flag(Debug)
-        CPP-Options:	-DDEBUG
-        CC-Options:	"-ggdb3" "-Wall"
+        CPP-Options:    -DDEBUG
+        CC-Options:     "-ggdb3" "-Wall"
     else
-        CC-Options:	"-g0" "-DNDEBUG" "-Wall"
+        CC-Options:     "-g0" "-DNDEBUG" "-Wall"
 
-test-suite olympic
+test-suite monadiccp-olympic
    hs-source-dirs: examples
    type: exitcode-stdio-1.0
    main-is: Olympic.hs
    build-depends: base, monadiccp
+
+test-suite monadiccp-vuza
+   hs-source-dirs: examples
+   type: exitcode-stdio-1.0
+   main-is: Vuza.hs
+   build-depends: base, monadiccp
+   
